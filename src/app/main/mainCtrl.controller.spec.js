@@ -24,7 +24,7 @@ describe('Controller: mainCtrl', function() {
   });
 
 	it('should define $scope.terw', function () {
-		expect(angular.isFunction($scope.aterw)).toBe(true);
+		expect(angular.isFunction($scope.terw)).toBe(true);
 		// TODO: add tests for other behaviour here
   });
 
