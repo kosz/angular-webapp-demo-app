@@ -16,16 +16,19 @@ module.exports = function(config) {
     files: [
       
       // gulp-inject:mainBowerFiles
-        "src/bower_components/angular/angular.js",
-        "src/bower_components/angular-route/angular-route.js",
-        "src/bower_components/angular-mocks/angular-mocks.js",
-      // gulp-inject:mainBowerFiles:end
+                                "src/bower_components/angular/angular.js",
+                                "src/bower_components/angular-route/angular-route.js",
+                                "src/bower_components/angular-mocks/angular-mocks.js",
+                              // gulp-inject:mainBowerFiles:end
       
       // gulp-inject:src
-        "src/app/app.js",
-        "src/app/main/mainCtrl.controller.js",
-        "src/app/main/mainCtrl.controller.spec.js"
-      // gulp-inject:src:end
+                                "src/app/app.js",
+                                "src/app/main/mainCtrl.controller.js",
+                                "src/app/main/mainCtrl.controller.spec.js",
+                                "src/app/test/index.js",
+                                "src/app/test/test.controller.js",
+                                "src/app/test/test.controller.spec.js"
+                              // gulp-inject:src:end
 			
     ],
 
