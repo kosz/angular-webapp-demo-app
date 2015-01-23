@@ -1,4 +1,4 @@
-describe('Controller: mainCtrl', function() {
+describe('Controller: exampleRoute', function() {
   var controller, $rootScope;
     
 
@@ -9,7 +9,7 @@ describe('Controller: mainCtrl', function() {
         $rootScope = _$rootScope_;
         
 
-    controller = $controller('mainCtrl', { 
+    controller = $controller('exampleRoute', { 
       });
   }));
 

@@ -11,45 +11,56 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     mainBowerFiles = require('main-bower-files'),
     karma = require('gulp-karma'),
+    ngdocs = require('gulp-ngdocs'),
     path = require('path');
 
-gulp.task('default', ['deploy', 'dist','serve'], function() {
-  gulp.watch(['src/**/*','!src/index.html'] , ['deploy', 'dist']);
+var eventType = 'added'; // defaults to this so that it triggers the index task on startup
+
+gulp.task('ngdocs', function () {
+  var options = {
+    //scripts: ['src/app.js'],
+    html5Mode: true,
+    startPage: '/api',
+    title: "angular-webapp-demo-app",
+    image: "../.tmp/img/yo.png",
+    imageLink: "/api",
+    titleLink: "/api"
+  }
+  return gulp.src(['src/**/*.js','!src/ng-docs/**/*', '!src/bower_components/**/*'])
+    .pipe(ngdocs.process(options))
+    .pipe(gulp.dest('./src/ng-docs'));
 });
 
-gulp.task('deploy', ['test'], function() {
+gulp.task('default', ['deploy', 'serve'], function() {
+ var watcher = gulp.watch(['!src/index.html', '!src/ng-docs/**/*', 'src/app/**/*', 'src/demo/**/*', 'src/module/**/*'], function (e) {
+  eventType = e.type;
+  gulp.start('deploy');
+ });
+});
+
+gulp.task('deploy', ['dist'], function() {
   console.log("deploying TODO: ");
 });
 
-gulp.task('index', ['karma-inject'], function () {
+gulp.task('index', function () {
 
   var target = gulp.src('./src/index.html');
-  var sources = gulp.src(['./src/app/app.js', '!./src/bower_components/**/*', '!./src/**/*.spec.js', './src/**/*.js', './src/**/*.css'], {read: false});
+  var sources = gulp.src(['./src/app/app.js', './src/module/module.js', './src/demo/demo.js', '!./src/ng-docs/**/*', '!./src/bower_components/**/*', '!./src/**/*.spec.js', './src/**/*.js', './src/**/*.css'], {read: false});
   target.pipe(inject(sources, {ignorePath: 'src', addRootSlash: false }))
-  .pipe(inject(gulp.src(mainBowerFiles(), {read: false}), {ignorePath: 'src', addRootSlash: false, name: 'bower'}))
+  .pipe(inject(gulp.src(mainBowerFiles({ filter: /^((?!(angular-mocks.js)).)*$/ }), {read: false}), {ignorePath: 'src', addRootSlash: false, name: 'bower'}))
   .pipe(gulp.dest('./src'));
 
-});
-
-gulp.task('test', function () {
- return gulp.src('./http://stackoverflow.com/questions/22413767/angular-testing-with-karma-module-is-not-defined :)')
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    })).on('error', function (err) {
-      gulp.watch(['src/**/*','!src/index.html'] , ['deploy', 'dist']); //TODO: warning copy pasted from deploy, workarround for gulp errors
-    });
 });
 
 gulp.task('karma-inject', function () {
   var sources = gulp.src(['./src/app/app.js', '!./src/bower_components/**/*', './src/**/*.js']);
 
   return gulp.src('./karma.conf.js')
-    .pipe(inject(sources,{starttag: '// gulp-inject:src', endtag: '// gulp-inject:src:end', addRootSlash: false, 
+    .pipe(inject(sources,{starttag: '// gulp-inject:src', endtag: '// gulp-inject:src:end', addRootSlash: false,
       transform: function (filepath, file, i, length) {
         return '  "' + filepath + '"' + (i + 1 < length ? ',' : '');
       }}))
-    .pipe(inject(gulp.src(mainBowerFiles()),{starttag: '// gulp-inject:mainBowerFiles', endtag: '// gulp-inject:mainBowerFiles:end', addRootSlash: false, 
+    .pipe(inject(gulp.src(mainBowerFiles()),{starttag: '// gulp-inject:mainBowerFiles', endtag: '// gulp-inject:mainBowerFiles:end', addRootSlash: false,
       transform: function (filepath, file, i, length) {
         return '  "' + filepath + '",';
       }}))
@@ -58,10 +69,10 @@ gulp.task('karma-inject', function () {
 
 gulp.task('dist', ['index'], function(done) {
   return gulp.src(['src/app/app.js', '!src/**/*.spec.js', 'src/**/*.js'])
-    .pipe(concat('anglr.js'))
+    .pipe(concat('angular-webapp-demo-app.js'))
     .pipe(gulp.dest('dist'))
     .pipe(uglify())
-    .pipe(rename('anglr.min.js'))
+    .pipe(rename('angular-webapp-demo-app.min.js'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
 });
@@ -70,7 +81,7 @@ gulp.task('html-templates', ['sass'], function() {
    return gulp.src([ 'src/**/*.html', '!src/index.html' ])
      .pipe(ngCache({
         filename : 'templates.js',
-        module : 'anglr'
+        module : 'angular-webapp-demo-app'
       }))
      .pipe(gulp.dest('src'));
 });
@@ -80,8 +91,7 @@ gulp.task('html-temp-templates-clean', [ 'html-templates', 'dist' ], function() 
     .pipe(clean({ force: true }));
 });
 
-gulp.task('serve', ['dist'], function() {
-  //gulp.watch( 'src/**/*' , ['dist']);
+gulp.task('serve', ['deploy'], function() {
   return gulp.src('src')
     .pipe(webserver({
       livereload: true,
@@ -91,9 +101,9 @@ gulp.task('serve', ['dist'], function() {
 });
 
 gulp.task('sass', function () {
-  var src = 'src/**/**.scss';
-  return gulp.src('src')
+  var src = 'src/**/*.scss';
+  return gulp.src(src)
       .pipe(sass())
       .pipe(concat('css' + '.css'))
-      .pipe(gulp.dest('dist'));
+      .pipe(gulp.dest('src/.tmp'));
 });

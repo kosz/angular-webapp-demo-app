@@ -14,22 +14,30 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      
+
       // gulp-inject:mainBowerFiles
-                                          "src/bower_components/angular/angular.js",
-                                          "src/bower_components/angular-route/angular-route.js",
-                                          "src/bower_components/angular-mocks/angular-mocks.js",
-                                        // gulp-inject:mainBowerFiles:end
-      
+        "src/bower_components/angular/angular.js",
+        "src/bower_components/angular-route/angular-route.js",
+        "src/bower_components/angular-mocks/angular-mocks.js",
+      // gulp-inject:mainBowerFiles:end
+
       // gulp-inject:src
-                                          "src/app/app.js",
-                                          "src/test/index.js",
-                                          "src/test/test.controller.js",
-                                          "src/test/test.controller.spec.js",
-                                          "src/app/main/mainCtrl.controller.js",
-                                          "src/app/main/mainCtrl.controller.spec.js"
-                                        // gulp-inject:src:end
-			
+        "src/app/app.js",
+        "src/app/exampleRoute/exampleRoute.controller.js",
+        "src/app/exampleRoute/exampleRoute.controller.spec.js",
+        "src/app/exampleRoute/index.js",
+        "src/app/main/mainCtrl.controller.js",
+        "src/app/main/mainCtrl.controller.spec.js",
+        "src/ng-docs/js/angular-animate.min.js",
+        "src/ng-docs/js/angular-bootstrap-prettify.js",
+        "src/ng-docs/js/angular-bootstrap.js",
+        "src/ng-docs/js/angular.min.js",
+        "src/ng-docs/js/docs-setup.js",
+        "src/ng-docs/js/docs.js",
+        "src/ng-docs/js/marked.js",
+        "src/ng-docs/js/prettify.js"
+      // gulp-inject:src:end
+
     ],
 
     // list of files to exclude
@@ -41,7 +49,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-    
+
     },
 
 

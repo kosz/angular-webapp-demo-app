@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="anglr">
+<html ng-app="angular-webapp-demo-app">
 <head>
-  <title>My index</title>
+  <title>angular-webapp-demo-app</title>
   <base href="/">
 
   <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <!-- endinject -->
 
   <!-- inject:css -->
@@ -12,15 +13,19 @@
 
   <!-- bower:js -->
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <!-- endinject -->
 </head>
 <body>
-  <h1>Hello anglr</h1> 
+  <div ng-include="'app/main/header.html'"></div>
   <ng-view></ng-view>
+  <div ng-include="'app/main/footer.html'"></div>
   <!-- inject:js -->
   <script src="app/app.js"></script>
+  <script src="app/exampleRoute/exampleRoute.controller.js"></script>
+  <script src="app/exampleRoute/index.js"></script>
   <script src="app/main/mainCtrl.controller.js"></script>
   <!-- endinject -->
 </body>
